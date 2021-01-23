@@ -87,6 +87,10 @@ public class ShoppingList {
 		addButton.addActionListener( new ActionListener() {
 			@Override 
 			public void actionPerformed(ActionEvent arg0) {
+				if(addField.getText().equals("")) {
+					System.out.println("You have to fill the field next to the button.");
+					return;
+				}
 				String addText = addField.getText();
 				currentList.addProduct(addText);
 				listArea.setText(currentList.toString());
@@ -96,6 +100,10 @@ public class ShoppingList {
 		deleteButton.addActionListener( new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				if(deleteField.getText().equals("")) {
+					System.out.println("You have to fill the field next to the button.");
+					return;
+				}
 				String deleteText = deleteField.getText();
 				currentList.deleteProduct(deleteText);
 				listArea.setText(currentList.toString());
@@ -107,10 +115,39 @@ public class ShoppingList {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String name = saveField.getText();
-				if(currentList.getNumberOfProducts()<=0 || name.equals("")) {
+				saveField.setText("");
+				if(name.equals("")) {
+					System.out.println("You have to fill the field next to the button.");
 					return;
 				}
-				String toFile = "\n" + name + "\n" + currentList.toFile();
+				File previousLists = new File("previousLists.txt");
+				try {
+					Scanner sc = new Scanner(previousLists);
+					String line = "", previousLine = "";
+					boolean hasTheSameName = false;
+					while(sc.hasNextLine() && !hasTheSameName) {
+						previousLine = line;
+						line = sc.nextLine();
+						if(line.equals(name) && previousLine.equals("")) {
+							hasTheSameName = true;
+						}
+					}
+					if(hasTheSameName) {
+						System.out.println("There is an already existing list with this name.");
+						sc.close();
+						return;
+					}
+					sc.close();
+				} catch (FileNotFoundException e) {
+					try {
+						previousLists.createNewFile();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					e.printStackTrace();
+				}
+				String toFile = "\n" + name + "\n" + currentList.toFileFormat();
 				try {
 					FileWriter myWriter = new FileWriter("previousLists.txt", true);
 					myWriter.write(toFile);
@@ -127,6 +164,10 @@ public class ShoppingList {
 		openButton.addActionListener(new ActionListener() { 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				if(openField.getText().equals("")) {
+					System.out.println("You have to fill the field next to the button.");
+					return;
+				}
 				File previousLists = new File("previousLists.txt");
 				String name = openField.getText();
 				nameOfTheList.setText(name);
@@ -172,5 +213,4 @@ public class ShoppingList {
 		// make frame visible
 		frame.setVisible(true);
 	}
-
 }
