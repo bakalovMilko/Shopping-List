@@ -2,7 +2,7 @@ package shoppingListGUI;
 
 public class Product {
 	private String name;
-	private boolean alreadyBought = false;
+	private int timesInTheList=1;
 	
 	Product(String name){
 		this.name = name;
@@ -12,11 +12,11 @@ public class Product {
 		return name;
 	}
 
-	public boolean isAlreadyBought() {
-		return alreadyBought;
+	public int getTimesInList() {
+		return timesInTheList;
 	}
 
-	public void setAlreadyBought(boolean alreadyBought) {
-		this.alreadyBought = alreadyBought;
+	public void setTimesInList(int timesInList) {
+		this.timesInTheList = timesInList;
 	}
 }
