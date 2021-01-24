@@ -24,17 +24,6 @@ public class List {
 		return this.productsInTheList;
 	}
 	
-	public void addProduct (String productName) {
-		int index = this.searchForProduct(productName);
-		if(index>-1) {
-			 //add 1 to timesInList for this product
-			productsInTheList.get(index).setTimesInList(productsInTheList.get(index).getTimesInList()+1);
-		}
-		else {
-			Product product = new Product(productName);
-			productsInTheList.add(product);
-		}
-	}
 	//function that searches for particular product in the list
 	//if the product is found return its index
 	//else return -1
@@ -52,10 +41,22 @@ public class List {
 			return index;
 		}
 	}
+	public void addProduct (String productName) {
+		int index = this.searchForProduct(productName);
+		if(index>-1) {
+			 //adding 1 to timesInList for this product
+			productsInTheList.get(index).setTimesInList(productsInTheList.get(index).getTimesInList()+1);
+		}
+		else {
+			Product product = new Product(productName);
+			productsInTheList.add(product);
+		}
+	}
 	public void deleteProduct(String productName) {
 		int index = this.searchForProduct(productName);
 		if(index>=0) {
 			if(productsInTheList.get(index).getTimesInList()>1) {
+				//taking 1 from timesInTheList for the found product
 				productsInTheList.get(index).setTimesInList(productsInTheList.get(index).getTimesInList()-1);
 			}
 			else {
@@ -70,6 +71,7 @@ public class List {
 		for(int i=0; i<productsInTheList.size(); i++) {
 			a += (i+1) + ". " + productsInTheList.get(i).getName() 
 		 + ((productsInTheList.get(i).getTimesInList()>1)? (" x " + productsInTheList.get(i).getTimesInList()) : "") + "\n";
+			//the last row prevents printing x1, for example "chair x1"
 		}
 		return a;
 	}
