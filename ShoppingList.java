@@ -7,6 +7,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Scanner;
@@ -17,9 +19,13 @@ import java.io.IOException;
 
 public class ShoppingList {
 
+	/**
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
+		//initializing frame and panels
 		JFrame frame = new JFrame("Shopping List");
 		frame.setSize(1000, 200);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -30,15 +36,7 @@ public class ShoppingList {
 		
 		JPanel leftPanel = new JPanel();
 		mainPanel.add(leftPanel);
-		leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
-		
-		JPanel upLeftPanel =new JPanel();
-		leftPanel.add(upLeftPanel);
-		upLeftPanel.setLayout(new BoxLayout(upLeftPanel, BoxLayout.X_AXIS));
-		
-		JPanel downLeftPanel = new JPanel();
-		leftPanel.add(downLeftPanel);
-		downLeftPanel.setLayout(new BoxLayout(downLeftPanel, BoxLayout.X_AXIS));
+		leftPanel.setLayout(new GridLayout(2, 4));
 		
 		JPanel rightPanel = new JPanel();
 		mainPanel.add(rightPanel);
@@ -46,27 +44,26 @@ public class ShoppingList {
 		
 		
 		// left side
-		//up left side
+		//adding components
 		JButton addButton = new JButton("Add");
-		upLeftPanel.add(addButton);
+		leftPanel.add(addButton);
 		JTextField addField = new JTextField();
-		upLeftPanel.add(addField);
+		leftPanel.add(addField);
 		
 		JButton saveButton = new JButton("Save as");
-		upLeftPanel.add(saveButton);
+		leftPanel.add(saveButton);
 		JTextField saveField = new JTextField();
-		upLeftPanel.add(saveField);
-		
-		//down left side 
+		leftPanel.add(saveField);
+
 		JButton deleteButton = new JButton("Delete");
-		downLeftPanel.add(deleteButton);
+		leftPanel.add(deleteButton);
 		JTextField deleteField = new JTextField();
-		downLeftPanel.add(deleteField);
+		leftPanel.add(deleteField);
 		
 		JButton openButton = new JButton("Open");
-		downLeftPanel.add(openButton);
+		leftPanel.add(openButton);
 		JTextField openField = new JTextField();
-		downLeftPanel.add(openField);
+		leftPanel.add(openField);
 		
 		
 		//right side
@@ -78,8 +75,28 @@ public class ShoppingList {
 		listArea.setEditable(false);
 		listArea.setText("Here is your list:");
 		rightPanel.add(listArea);
+
+		//fonts
+		Font buttonFont = new Font("Times New Roman", Font.BOLD, 16);
+		Font fieldFont = new Font("Times New Roman", Font.PLAIN, 14);
+		Font listFont = new Font("Times New Roman", Font.ITALIC, 14);
+		Font titleFont = new Font("Verdana", Font.BOLD, 18);
 		
-		//Initializing object from type List
+		addButton.setFont(buttonFont);
+		saveButton.setFont(buttonFont);
+		deleteButton.setFont(buttonFont);
+		openButton.setFont(buttonFont);
+		
+		addField.setFont(fieldFont);
+		deleteField.setFont(fieldFont);
+		saveField.setFont(fieldFont);
+		openField.setFont(fieldFont);
+		
+		listArea.setFont(listFont);
+		
+		nameOfTheList.setFont(titleFont);
+		
+		//Initializing an object from type List
 		
 		List currentList = new List();
 		
@@ -115,12 +132,13 @@ public class ShoppingList {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String name = saveField.getText();
-				saveField.setText("");
+				saveField.setText(""); //clearing the field
 				if(name.equals("")) {
 					System.out.println("You have to fill the field next to the button.");
 					return;
 				}
 				File previousLists = new File("previousLists.txt");
+				//checking for file with the same name
 				try {
 					Scanner sc = new Scanner(previousLists);
 					String line = "", previousLine = "";
@@ -147,6 +165,7 @@ public class ShoppingList {
 					}
 					e.printStackTrace();
 				}
+				// adding the new list to the file
 				String toFile = "\n" + name + "\n" + currentList.toFileFormat();
 				try {
 					FileWriter myWriter = new FileWriter("previousLists.txt", true);
@@ -175,7 +194,7 @@ public class ShoppingList {
 				try {
 					Scanner sc = new Scanner(previousLists);
 					String line = "", previousLine = "";
-					boolean hasToAdd = false;
+					boolean hasToAdd = false; // a variable to indicate if the scanner has found the file or not
 					while(sc.hasNextLine()) {
 						previousLine = line;
 						line = sc.nextLine();
@@ -189,7 +208,7 @@ public class ShoppingList {
 								return;
 							}
 						}
-						else if(line.equals(name) && previousLine.equals("")) {
+						else if(line.equals(name) && previousLine.equals("")) { //if the statement is true we have found the list
 							currentList.setName(name);
 							hasToAdd = true;
 							currentList.makeListEmpty();
